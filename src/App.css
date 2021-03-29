@@ -1,38 +1,61 @@
-.App {
+@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+
+
+.header{
   text-align: center;
+  font-size: 34px;
+  font-family: 'Poiret One', cursive;
+  padding: 20px;
+  color: #82bd1d ;
+  margin-bottom: 50px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.selects_field{
+  width: 100%;
+  margin: 0 10px;
+  border-color: #82bd1d !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.search_btn{
+  background-color: #82bd1d67 !important;
+  padding: 8px 15px !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+
+
+/*  */
+
+.the_schedules_chart{
+  width: 600px;
+  margin-top: 70px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 15px 30px;
+}
+
+.location{
+  margin-top: 30px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  font-size: 18px;
+  color: #82bd1d;
+}
+
+.location span{
+  display: inline;
+  margin-left: 10px;
+}
+
+.warning{
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  color: #fff;
+  background-color: #ff0000;
+  width: max-content;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 5px;
 }

@@ -1,0 +1,98 @@
+import React , {useState , useEffect} from 'react';
+import Schedules  from './components/Schedules_chat';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid'; 
+import Button from '@material-ui/core/Button';
+
+import './App.css'
+
+
+const filterOptions = createFilterOptions({
+  matchFrom: 'start',
+  stringify: (option) => option.name,
+});
+
+
+function App() {
+
+  const [ inputValue , setInputValue ] = useState({
+    state:'',
+    zip_code: ''
+  });
+
+  const [ countries , setCountries ] = useState()
+
+  const submit_btn = () =>{
+    if( inputValue.state !=='' && inputValue.zip_code !=='' ){
+      console.log("empty")
+    }else{
+      console.log("ok")
+    }
+  }
+
+
+  useEffect(()=>{
+      fetch("https://restcountries.eu/rest/v2/all")
+      .then(response => response.json())
+      .then(countriesData => 
+          setCountries(countriesData) 
+        )
+  },[])
+
+  console.log(countries)
+
+  
+
+  
+
+  
+
+
+  
+
+
+
+  return (
+    <>
+      <h1 className="header"> Get Salath Schedules By Searching Location </h1>
+
+
+      <Container maxWidth="md">
+          <div className="input_field">
+            <Grid style={{ "display" : "flex" , "marginBottom" : "30px" }} justify="space-around" alignItems="center">
+                <Autocomplete
+                  onChange={(event, value) => setInputValue({ ...inputValue, state:value.alpha2Code })}
+                  id="country_name"
+                  className="selects_field"
+                  options={countries}
+                  getOptionLabel={(option) => option.name}
+                  filterOptions={filterOptions} 
+                  renderInput={(params) => <TextField {...params} label="Country Name" variant="outlined" />}
+                />
+
+                <TextField 
+                  className="selects_field" 
+                  id="outlined-basic" 
+                  label="Zip Code" 
+                  variant="outlined"
+                  onChange={(e) => setInputValue({ ...inputValue, zip_code:e.target.value })}
+                />
+            </Grid>
+          </div>
+
+          <Grid style={{ "display" : "flex" }} justify="space-around" alignItems="center">
+            <Button onClick={submit_btn} className="search_btn" > Search Now </Button>
+          </Grid>
+
+
+
+          <Schedules/>
+
+      </Container>
+    </>
+  )
+}
+
+export default App;
