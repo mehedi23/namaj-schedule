@@ -12,7 +12,6 @@
 
 .selects_field{
   width: 100%;
-  margin: 0 10px;
   border-color: #82bd1d !important;
 }
 
@@ -58,4 +57,33 @@
   margin: 10px auto;
   padding: 10px;
   border-radius: 5px;
+}
+
+
+.loading{
+  position: absolute;
+  left: 50%;
+  width: min-content;
+  transform: translateX(-50%);
+}
+
+.loader{
+  width: 25px !important;
+  height: 25px !important;
+  color: #1f4d74 !important;
+}
+
+.input_field{
+  margin-bottom: 10px !important;
+}
+
+.input_field input{
+  width: 100% !important;
+}
+
+@media screen and (max-width:630px) {
+  .the_schedules_chart{
+    width: 100% !important;
+    padding: 0 !important;
+  }
 }

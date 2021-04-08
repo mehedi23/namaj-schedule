@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid'; 
 import Button from '@material-ui/core/Button';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import './App.css'
 
@@ -24,53 +25,57 @@ function App() {
     zip_code: ''
   });
 
+  const [ loader , setLoader ] = useState(false)
+
   const [ namaj_time , setNamaj_time ] = useState({
     Fajr: "--",
     Dhuhr : "--",
     Asr : "--",
     Maghrib: "--",
-    Isha : "--",
-    locations_city: "",
-    locations_division: "", 
-    locations_country: "",
+    Isha : "--", 
+    latitude: "--",
+    longitude: "--",
   });
 
   const [ match , setMatch ] = useState(true)
 
   const submit_btn = () =>{
-
-    console.log(inputValue)
     
-    setNamaj_time({
-      Fajr: "--",
-      Dhuhr : "--",
-      Asr : "--",
-      Maghrib: "--",
-      Isha : "--",
-      locations_city: "",
-      locations_division: "", 
-      locations_country: "",
-    });
+    setNamaj_time({...namaj_time});
     setMatch(true);
 
     if( inputValue.state !=='' && inputValue.zip_code !=='' && inputValue.state !== null ){ 
+      setLoader(true);
+
       fetch(`http://api.aladhan.com/v1/timingsByCity?city=${inputValue.zip_code}&country=${inputValue.state.country_list.country}`)
         .then(response => response.json())
-        .then(res=> res.code == 200 ? 
-              setNamaj_time({
+        .then(res=> res.code === 200 ? 
+              setNamaj_time({ 
                 Fajr: res.data.timings.Fajr,
                 Dhuhr : res.data.timings.Dhuhr,
                 Asr : res.data.timings.Asr,
                 Maghrib: res.data.timings.Maghrib,
                 Isha : res.data.timings.Isha,
-                locations_city: "",
-                locations_division: "", 
-                locations_country: "",
+                latitude: res.data.meta.latitude,
+                longitude: res.data.meta.longitude
               })
-         : console.log(res) );
-    }else{
-      console.log("ok")
-    };
+         : '' )
+         .then(()=> setLoader(false));
+
+      
+      // fetch(`https://api.worldpostallocations.com/pincode?postalcode=${inputValue.zip_code}&countrycode=${inputValue.state.code}`)
+      // .then(response => response.json())
+      // .then( res => 
+      //   console.log(res)
+      //   // setLocation({ 
+      //   //   locations_city: res.result[0].postalLocation,
+      //   //   locations_division: res.result[0].state, 
+      //   //   locations_country: inputValue.state.country_list.country, 
+      //   // })
+      // ); 
+    }
+
+    
   };
 
   const country_array = [];
@@ -94,10 +99,9 @@ function App() {
     <>
       <h1 className="header"> Get Salath Schedules By Searching Location </h1>
 
-
       <Container maxWidth="md">
-          <div className="input_field">
-            <Grid style={{ "display" : "flex" , "marginBottom" : "30px" }} justify="space-around" alignItems="center">
+          <Grid container spacing={2} className="input_field">
+            <Grid item xs={12} sm={6} >
                 <Autocomplete
                   onChange={(event, value) => setInputValue({ ...inputValue, state:value }) }
                   id="country_name"
@@ -107,7 +111,9 @@ function App() {
                   filterOptions={filterOptions} 
                   renderInput={(params) => <TextField {...params} label="Country Name" variant="outlined" />}
                 />
+            </Grid>
 
+            <Grid item xs={12} sm={6} >
                 <TextField 
                   className="selects_field" 
                   id="outlined-basic" 
@@ -116,9 +122,16 @@ function App() {
                   onChange={(e) => setInputValue({ ...inputValue, zip_code:e.target.value })}
                 />
             </Grid>
-          </div>
+          </Grid>
 
-          <Grid style={{ "display" : "flex" }} justify="space-around" alignItems="center">
+          <Grid item container  style={{ "display" : "flex", "position": "relative" }} justify="space-around" alignItems="center">
+            { 
+              loader ?  <div className="loading">
+                          <CircularProgress className="loader" />
+                        </div>
+                        : ''  
+            }
+            
             <Button onClick={submit_btn} className="search_btn" > Search Now </Button>
           </Grid>
 
@@ -126,7 +139,7 @@ function App() {
             <p className="warning"> <WarningRoundedIcon/> The country and zip code are not match </p>
           }
 
-          <Schedules namaj_time={namaj_time}/>
+          <Schedules namaj_time={namaj_time} loader={loader}/>
 
       </Container>
     </>

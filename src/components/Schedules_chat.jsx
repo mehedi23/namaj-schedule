@@ -50,12 +50,7 @@ const useStyles = makeStyles({
 
 
 
-
-
-
-
-function Schedules_chat(props) { 
-    console.log(props)
+function Schedules_chat(props) {
 
     const rows = [
         createData('Fajr', props.namaj_time.Fajr ),
@@ -71,12 +66,12 @@ function Schedules_chat(props) {
 
     return (
         <div className="the_schedules_chart">
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={ props.loader ? { 'background':'#82bd1d47' }:{}}>
                 <Table className={classes.table} aria-label="customized table">
 
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell> Name The Namaz</StyledTableCell>
+                            <StyledTableCell> List Of Salath </StyledTableCell>
                             <StyledTableCell align="right">Time</StyledTableCell>
                         </TableRow>
                     </TableHead>
@@ -96,16 +91,15 @@ function Schedules_chat(props) {
 
             <div className="location">
               {
-                props.namaj_time.locations_city === "" || props.namaj_time.locations_division === "" || props.namaj_time.locations_country === "" ? 
+                props.namaj_time.latitude === "" || props.namaj_time.longitude === "" ? 
                 <> 
                   <LocationOnOutlinedIcon/>
                   <span> Select Your Country with zip code </span>  
                 </> : 
                 <> 
                   <LocationOnOutlinedIcon/>
-                  <span> {props.namaj_time.locations_city } </span> ,
-                  <span> {props.namaj_time.locations_division } </span> ,
-                  <span> {props.namaj_time.locations_country} </span>  
+                  <span> {props.namaj_time.latitude } </span> ,
+                  <span> {props.namaj_time.longitude } </span>
                 </>
               }
               
@@ -113,5 +107,7 @@ function Schedules_chat(props) {
         </div>
     )
 }
+
+// https://www.google.com/maps/search/25.332168+,+89.5503842/@25.3321692,89.549837,19z
 
 export default Schedules_chat
