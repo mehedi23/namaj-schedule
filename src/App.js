@@ -6,8 +6,8 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid'; 
 import Button from '@material-ui/core/Button';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import './App.css'
 
@@ -25,7 +25,8 @@ function App() {
     zip_code: ''
   });
 
-  const [ loader , setLoader ] = useState(false)
+  const [ loader , setLoader ] = useState(false);
+  const [ noResponse , setNoResponse ] = useState(false);
 
   const [ namaj_time , setNamaj_time ] = useState({
     Fajr: "--",
@@ -37,12 +38,8 @@ function App() {
     longitude: "--",
   });
 
-  const [ match , setMatch ] = useState(true)
 
   const submit_btn = () =>{
-    
-    setNamaj_time({...namaj_time});
-    setMatch(true);
 
     if( inputValue.state !=='' && inputValue.zip_code !=='' && inputValue.state !== null ){ 
       setLoader(true);
@@ -59,8 +56,8 @@ function App() {
                 latitude: res.data.meta.latitude,
                 longitude: res.data.meta.longitude
               })
-         : '' )
-         .then(()=> setLoader(false));
+         :  setNoResponse(true) )
+        .then(()=> setLoader(false));
 
       
       // fetch(`https://api.worldpostallocations.com/pincode?postalcode=${inputValue.zip_code}&countrycode=${inputValue.state.code}`)
@@ -108,6 +105,7 @@ function App() {
                   className="selects_field"
                   options={country_array}
                   getOptionLabel={(option) => option.country_list.country}
+                  getOptionSelected={(option) => option.country_list.country}
                   filterOptions={filterOptions} 
                   renderInput={(params) => <TextField {...params} label="Country Name" variant="outlined" />}
                 />
@@ -124,7 +122,10 @@ function App() {
             </Grid>
           </Grid>
 
+
+
           <Grid item container  style={{ "display" : "flex", "position": "relative" }} justify="space-around" alignItems="center">
+
             { 
               loader ?  <div className="loading">
                           <CircularProgress className="loader" />
@@ -135,10 +136,15 @@ function App() {
             <Button onClick={submit_btn} className="search_btn" > Search Now </Button>
           </Grid>
 
-          { match ? '' : 
-            <p className="warning"> <WarningRoundedIcon/> The country and zip code are not match </p>
-          }
 
+
+          { 
+            noResponse ?  <Alert severity="error">
+                            <AlertTitle>Error</AlertTitle>
+                            The country or zip code does not match
+                          </Alert> 
+                        : '' 
+          }
           <Schedules namaj_time={namaj_time} loader={loader}/>
 
       </Container>

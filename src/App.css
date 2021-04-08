@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
 
+body{
+  padding: 20px 0;
+}
+
 
 .header{
   text-align: center;
@@ -19,6 +23,7 @@
 .search_btn{
   background-color: #82bd1d67 !important;
   padding: 8px 15px !important;
+  margin-bottom: 10px !important;
 }
 
 
