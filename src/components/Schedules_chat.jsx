@@ -71,7 +71,7 @@ function Schedules_chat(props) {
 
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell> List Of Salath </StyledTableCell>
+                            <StyledTableCell> Name Of Salaths </StyledTableCell>
                             <StyledTableCell align="right">Time</StyledTableCell>
                         </TableRow>
                     </TableHead>

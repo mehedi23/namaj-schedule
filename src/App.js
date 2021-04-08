@@ -26,7 +26,6 @@ function App() {
   });
 
   const [ loader , setLoader ] = useState(false);
-  const [ noResponse , setNoResponse ] = useState(false);
 
   const [ namaj_time , setNamaj_time ] = useState({
     Fajr: "--",
@@ -36,6 +35,7 @@ function App() {
     Isha : "--", 
     latitude: "--",
     longitude: "--",
+    res: false
   });
 
 
@@ -54,9 +54,20 @@ function App() {
                 Maghrib: res.data.timings.Maghrib,
                 Isha : res.data.timings.Isha,
                 latitude: res.data.meta.latitude,
-                longitude: res.data.meta.longitude
+                longitude: res.data.meta.longitude,
+                res: false
               })
-         :  setNoResponse(true) )
+              : setNamaj_time({ 
+                Fajr: '---',
+                Dhuhr : '---',
+                Asr : '---',
+                Maghrib: '---',
+                Isha : '---',
+                latitude: '---',
+                longitude: '---',
+                res: true
+              })
+          )
         .then(()=> setLoader(false));
 
       
@@ -139,7 +150,7 @@ function App() {
 
 
           { 
-            noResponse ?  <Alert severity="error">
+            namaj_time.res ?  <Alert severity="error">
                             <AlertTitle>Error</AlertTitle>
                             The country or zip code does not match
                           </Alert> 
